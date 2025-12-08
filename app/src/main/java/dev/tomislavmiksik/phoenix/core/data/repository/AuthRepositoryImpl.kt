@@ -1,26 +1,28 @@
 package dev.tomislavmiksik.phoenix.core.data.repository
 
+import dev.tomislavmiksik.phoenix.core.data.datastore.PhoenixPreferencesDataSource
 import dev.tomislavmiksik.phoenix.core.data.remote.api.AuthApi
 import dev.tomislavmiksik.phoenix.core.data.remote.dto.LoginRequestDto
+import dev.tomislavmiksik.phoenix.core.data.remote.dto.LoginResponseDto
 import dev.tomislavmiksik.phoenix.core.domain.repository.AuthRepository
 import javax.inject.Inject
 
 internal class AuthRepositoryImpl @Inject constructor(
-    private val authApi: AuthApi
+    private val authApi: AuthApi,
+    private val dataSource: PhoenixPreferencesDataSource
 ) : AuthRepository {
 
-    override suspend fun login(email: String, password: String): Result<String> {
-        return try {
-            val response = authApi.login(LoginRequestDto(email, password))
-            Result.success(response.jwtToken)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+    override suspend fun login(email: String, password: String): LoginResponseDto {
+        val response = authApi.login(LoginRequestDto(email, password))
+
+        dataSource.saveJwtToken(response.jwtToken)
+
+        return response
     }
 
     override suspend fun logout(): Result<Unit> {
         return try {
-            // TODO: Clear stored token/session
+            dataSource.clearJwtToken()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -28,7 +30,6 @@ internal class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isAuthenticated(): Boolean {
-        // TODO: Check if token exists and is valid
-        return false
+        return dataSource.getJwtToken() != null
     }
 }

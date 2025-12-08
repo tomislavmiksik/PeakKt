@@ -6,8 +6,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.tomislavmiksik.phoenix.core.config.AppConfig
+import dev.tomislavmiksik.phoenix.core.data.datastore.PhoenixPreferencesDataSource
 import dev.tomislavmiksik.phoenix.core.data.remote.api.AuthApi
 import dev.tomislavmiksik.phoenix.core.data.remote.api.MeasurementApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -31,11 +33,13 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        appConfig: AppConfig
+        appConfig: AppConfig,
+        dataSource: PhoenixPreferencesDataSource
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(provideLoggingInterceptor(appConfig))
             .addInterceptor(provideApiKeyInterceptor(appConfig))
+            .addInterceptor(provideJwtTokenInterceptor(dataSource))
             .connectTimeout(appConfig.networkTimeout.toLong(), TimeUnit.SECONDS)
             .readTimeout(appConfig.networkTimeout.toLong(), TimeUnit.SECONDS)
             .writeTimeout(appConfig.networkTimeout.toLong(), TimeUnit.SECONDS)
@@ -63,6 +67,24 @@ object NetworkModule {
                 .addHeader("X-API-KEY", appConfig.apiKey)
                 .addHeader("Content-Type", "application/json")
                 .build()
+            chain.proceed(request)
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideJwtTokenInterceptor(dataSource: PhoenixPreferencesDataSource): Interceptor {
+        return Interceptor { chain ->
+            val original = chain.request()
+
+            val token = runBlocking {
+                dataSource.getJwtToken()
+            } ?: ""
+            
+            val request = original.newBuilder()
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
             chain.proceed(request)
         }
     }

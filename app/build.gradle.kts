@@ -165,6 +165,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Datastore preferences
+    implementation(libs.datastore)
+    implementation(libs.datastore.preferences)
 }
 
 // Detekt Configuration

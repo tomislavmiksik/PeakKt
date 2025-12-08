@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.tomislavmiksik.phoenix.core.domain.repository.AuthRepository
+import dev.tomislavmiksik.phoenix.core.util.NetworkErrorHandler
 import dev.tomislavmiksik.phoenix.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -14,11 +15,11 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     val authRepository: AuthRepository,
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(
-    initialState = LoginState.debug()
+    initialState = LoginState.debug
 ) {
     override fun handleAction(action: LoginAction) {
         when (action) {
-            is LoginAction.EmailChanged -> handleEmailChanged(action)
+            is LoginAction.UsernameChanged -> handleEmailChanged(action)
             is LoginAction.PasswordChanged -> handlePasswordChanged(action)
             is LoginAction.LoginButtonClick -> handleLoginButtonClick()
             is LoginAction.Internal.LoginSuccess -> handleLoginSuccess()
@@ -26,9 +27,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun handleEmailChanged(action: LoginAction.EmailChanged) {
+    private fun handleEmailChanged(action: LoginAction.UsernameChanged) {
         mutableStateFlow.update {
-            it.copy(email = action.email, errorMessage = null)
+            it.copy(username = action.email, errorMessage = null)
         }
     }
 
@@ -42,16 +43,20 @@ class LoginViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isLoading = true, errorMessage = null) }
 
         viewModelScope.launch {
-            if (state.email.isNotEmpty() && state.password.isNotEmpty()) {
-                authRepository.login(
-                    email = state.email.trim(),
-                    password = state.password
-                ).fold(
+            if (state.username.isNotEmpty() && state.password.isNotEmpty()) {
+                val response = runCatching {
+                    authRepository.login(
+                        email = state.username.trim(),
+                        password = state.password
+                    )
+                }
+
+                response.fold(
                     onSuccess = { token ->
                         sendAction(LoginAction.Internal.LoginSuccess)
                     },
                     onFailure = { exception ->
-                        val errorMessage = exception.message ?: "Unknown error occurred"
+                        val errorMessage = NetworkErrorHandler.getErrorMessage(exception)
                         sendAction(LoginAction.Internal.LoginError(errorMessage))
                     }
                 )
@@ -76,24 +81,24 @@ class LoginViewModel @Inject constructor(
 
 @Parcelize
 data class LoginState(
-    val email: String,
+    val username: String,
     val password: String,
     val isLoading: Boolean,
     val errorMessage: String?,
 ) : Parcelable {
     val isLoginEnabled: Boolean
-        get() = !isLoading && email.isNotEmpty() && password.isNotEmpty()
+        get() = !isLoading && username.isNotEmpty() && password.isNotEmpty()
 
     companion object HelperStates {
-        fun empty(): LoginState = LoginState(
-            email = "",
+        val empty: LoginState = LoginState(
+            username = "",
             password = "",
             isLoading = false,
             errorMessage = null,
         )
 
-        fun debug(): LoginState = LoginState(
-            email = "test@user.com",
+        val debug: LoginState = LoginState(
+            username = "user123",
             password = "user123",
             isLoading = false,
             errorMessage = null,
@@ -107,7 +112,7 @@ sealed class LoginEvent {
 }
 
 sealed class LoginAction {
-    data class EmailChanged(val email: String) : LoginAction()
+    data class UsernameChanged(val email: String) : LoginAction()
     data class PasswordChanged(val password: String) : LoginAction()
     data object LoginButtonClick : LoginAction()
 

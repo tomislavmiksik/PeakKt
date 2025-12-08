@@ -1,6 +1,5 @@
 package dev.tomislavmiksik.phoenix.ui.login
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.tomislavmiksik.phoenix.BuildConfig
 import dev.tomislavmiksik.phoenix.ui.platform.base.util.EventsEffect
 
 /**
@@ -38,12 +35,6 @@ fun LoginScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-
-        Log.d("DEBUG_CONFIG", "API URL: ${BuildConfig.API_BASE_URL}")
-        Log.d("DEBUG_CONFIG", "API KEY: ${BuildConfig.API_KEY}")
-    }
-
     // Handle events from ViewModel
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -54,7 +45,7 @@ fun LoginScreen(
 
     LoginScreenContent(
         state = state,
-        onEmailChange = { viewModel.trySendAction(LoginAction.EmailChanged(it)) },
+        onUsernameChanged = { viewModel.trySendAction(LoginAction.UsernameChanged(it)) },
         onPasswordChange = { viewModel.trySendAction(LoginAction.PasswordChanged(it)) },
         onLoginClick = { viewModel.trySendAction(LoginAction.LoginButtonClick) },
     )
@@ -64,7 +55,7 @@ fun LoginScreen(
 @Suppress("LongMethod")
 private fun LoginScreenContent(
     state: LoginState,
-    onEmailChange: (String) -> Unit,
+    onUsernameChanged: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
 ) {
@@ -96,9 +87,9 @@ private fun LoginScreenContent(
         Spacer(modifier = Modifier.height(48.dp))
 
         OutlinedTextField(
-            value = state.email,
-            onValueChange = onEmailChange,
-            label = { Text("Email") },
+            value = state.username,
+            onValueChange = onUsernameChanged,
+            label = { Text("Username") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
         )
