@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Environment configuration files (contain sensitive data)
+app/env/**/application.properties
+!app/env/**/*.template

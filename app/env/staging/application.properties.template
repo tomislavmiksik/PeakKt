@@ -1,0 +1,17 @@
+# Staging Environment Configuration Template
+# Copy this file to application.properties and fill in your actual values
+# application.properties is gitignored for security
+
+# API Configuration
+api.base.url=https://staging-api.phoenix.com/v1/
+api.key=YOUR_STAGING_API_KEY_HERE
+
+# Debug Settings
+debug.mode=false
+
+# Network Configuration
+network.timeout=30
+
+# Feature Flags (add as needed)
+# feature.progress.tracking=true
+# feature.workout.templates=true
