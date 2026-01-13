@@ -1,45 +1,28 @@
-# Phoenix Fitness
+# Phoenix
 
-An Android fitness tracking application built with Kotlin and Jetpack Compose.
+Android clipboard manager that monitors copies, stores history locally, and lets you search, pin, and reuse past clipboard entries.
+
+## Status
+
+🚧 Work in progress
+
+## Planned Features
+
+- Clipboard monitoring via foreground service
+- Local history storage with Room
+- Search and pin entries
+- Optional account sync across devices
 
 ## Tech Stack
 
-- **Kotlin** - Programming language
-- **Jetpack Compose** - Modern UI toolkit
-- **Material Design 3** - UI design with Orange (#FF8427) primary color
-- **Hilt** - Dependency injection
-- **Room** - Local database
-- **Retrofit** - API client
-- **Coroutines & Flow** - Async operations
+- Kotlin, Jetpack Compose, Material 3
+- Hilt, Room, Coroutines
 
-## Architecture
-
-- **MVVM** with Clean Architecture
-- **State/Event/Action** pattern for ViewModels
-- **Type-safe navigation** with Kotlin Serialization
-- **Interface-based DI** for testability
-
-## Build Variants
-
-- `devDebug` - Development build
-- `stagingDebug` - Staging build
-- `prodDebug` - Production build
+## Build
 
 ```bash
-# Build and install dev variant
-./gradlew installDevDebug
-
-# Run Detekt code analysis
-./gradlew detekt
-```
-
-## Project Structure
-
-```
-app/src/main/java/dev/tomislavmiksik/phoenix/
-├── core/              # Data layer, config, DI
-├── ui/                # Screens and navigation
-└── MainActivity.kt
+./gradlew installDevDebug  # Install dev build
+./gradlew detekt           # Code analysis
 ```
 
 ## License

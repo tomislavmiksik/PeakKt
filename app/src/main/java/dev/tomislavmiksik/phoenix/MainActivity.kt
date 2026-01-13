@@ -12,7 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
-import dev.tomislavmiksik.phoenix.ui.platform.feature.rootnav.RootNavScreen
 import dev.tomislavmiksik.phoenix.ui.theme.PhoenixTheme
 
 /**
@@ -42,7 +41,7 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        RootNavScreen()
+                        // TODO: Add navigation graph here (History and Settings screens)
                     }
                 }
             }

@@ -6,30 +6,21 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import dev.tomislavmiksik.phoenix.core.data.local.converters.LocalDateTimeConverter
-import dev.tomislavmiksik.phoenix.core.data.local.dao.ExerciseDao
-import dev.tomislavmiksik.phoenix.core.data.local.dao.MeasurementDao
-import dev.tomislavmiksik.phoenix.core.data.local.dao.ProgressPointDao
-import dev.tomislavmiksik.phoenix.core.data.local.entity.ExerciseEntity
-import dev.tomislavmiksik.phoenix.core.data.local.entity.MeasurementEntity
-import dev.tomislavmiksik.phoenix.core.data.local.entity.ProgressPoint
+import dev.tomislavmiksik.phoenix.core.data.local.dao.ClipboardDao
+import dev.tomislavmiksik.phoenix.core.data.local.entity.ClipboardEntry
 
 @Database(
     entities = [
-        ExerciseEntity::class,
-        ProgressPoint::class,
-        MeasurementEntity::class,
+        ClipboardEntry::class,
     ],
-    version = DatabaseMigrations.DB_VERSION,
+    version = 1,
     exportSchema = false
 )
 @TypeConverters(
     LocalDateTimeConverter::class,
-
 )
 abstract class PhoenixDatabase : RoomDatabase() {
-    abstract fun getExerciseDao(): ExerciseDao
-    abstract fun getProgressPointDao(): ProgressPointDao
-    abstract fun getMeasurementDao(): MeasurementDao
+    abstract fun clipboardDao(): ClipboardDao
 
     companion object {
         private const val DB_NAME = "phoenix_database"
@@ -50,7 +41,8 @@ abstract class PhoenixDatabase : RoomDatabase() {
                         context.applicationContext,
                         PhoenixDatabase::class.java,
                         DB_NAME,
-                    ).addMigrations(*DatabaseMigrations.MIGRATIONS).build()
+                    ).fallbackToDestructiveMigration()
+                        .build()
 
                 INSTANCE = instance
                 return instance

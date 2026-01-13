@@ -1,0 +1,45 @@
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Phoenix</string>
+
+    <!-- Common -->
+    <string name="common_back">Natrag</string>
+
+    <!-- Home Screen -->
+    <string name="home_welcome_title">Dobrodošli u Phoenix!</string>
+    <string name="home_welcome_subtitle">Vaša osobna medijska biblioteka</string>
+    <string name="home_getting_started_title">Početak rada</string>
+    <string name="home_getting_started_description">Streamajte glazbu i pregledavajte fotografije s bilo kojeg mjesta.</string>
+    <string name="home_about_licenses_button">O aplikaciji &amp; licence</string>
+    <string name="home_logout_button">Odjava</string>
+
+    <!-- Login Screen -->
+    <string name="login_title">Phoenix</string>
+    <string name="login_username_label">Korisničko ime</string>
+    <string name="login_password_label">Lozinka</string>
+    <string name="login_button">Prijava</string>
+    <string name="login_no_account_text">Još nemate račun?</string>
+    <string name="login_signup_button">Registriraj se</string>
+
+    <!-- Register Screen -->
+    <string name="register_title">Kreiraj račun</string>
+    <string name="register_email_label">E-pošta</string>
+    <string name="register_username_label">Korisničko ime</string>
+    <string name="register_first_name_label">Ime</string>
+    <string name="register_last_name_label">Prezime</string>
+    <string name="register_password_label">Lozinka</string>
+    <string name="register_confirm_password_label">Potvrdi lozinku</string>
+    <string name="register_button">Kreiraj račun</string>
+    <string name="register_have_account_text">Već imate račun?</string>
+    <string name="register_signin_button">Prijavi se</string>
+
+    <!-- About Screen -->
+    <string name="about_title">O aplikaciji</string>
+    <string name="about_app_name">Phoenix</string>
+    <string name="about_version">Verzija 1.0</string>
+    <string name="about_description">Vaš osobni medijski centar. Streamajte glazbu, pregledavajte fotografije i upravljajte svojom medijskom kolekcijom s bilo kojeg mjesta.</string>
+    <string name="about_open_source_title">Otvoreni kod</string>
+    <string name="about_open_source_description">Ova aplikacija izrađena je pomoću softvera otvorenog koda. Zahvalni smo zajednici otvorenog koda.</string>
+    <string name="about_view_licenses_button">Prikaži licence otvorenog koda</string>
+    <string name="about_copyright">© 2025 Tomislav Miksik\nSva prava pridržana</string>
+</resources>
