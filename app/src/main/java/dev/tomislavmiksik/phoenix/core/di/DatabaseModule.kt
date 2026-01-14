@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.tomislavmiksik.phoenix.core.data.local.HealthSnapshotDao
 import dev.tomislavmiksik.phoenix.core.data.local.PhoenixDatabase
 import javax.inject.Singleton
 
@@ -25,5 +26,9 @@ object DatabaseModule {
             .build()
     }
 
-    // TODO: Add DAO providers here when implementing local caching
+    @Provides
+    @Singleton
+    fun provideHealthSnapshotDao(database: PhoenixDatabase): HealthSnapshotDao {
+        return database.healthSnapshotDao()
+    }
 }

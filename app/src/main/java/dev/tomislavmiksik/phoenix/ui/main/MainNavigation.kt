@@ -1,26 +1,28 @@
 package dev.tomislavmiksik.phoenix.ui.main
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import dev.tomislavmiksik.phoenix.ui.dashboard.DashboardScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
 data object MainGraph
 
 @Serializable
+data object MainRoute
+
+@Serializable
 data object DashboardRoute
 
-fun NavGraphBuilder.mainGraph(
-    navController: NavController,
-) {
+@Serializable
+data object ProfileRoute
+
+fun NavGraphBuilder.mainGraph() {
     navigation<MainGraph>(
-        startDestination = DashboardRoute,
+        startDestination = MainRoute,
     ) {
-        composable<DashboardRoute> {
-            DashboardScreen()
+        composable<MainRoute> {
+            MainScreen()
         }
     }
 }

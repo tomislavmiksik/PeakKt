@@ -6,6 +6,7 @@ import androidx.health.connect.client.records.StepsRecord
 import androidx.health.connect.client.records.WeightRecord
 import androidx.health.connect.client.request.ReadRecordsRequest
 import androidx.health.connect.client.time.TimeRangeFilter
+import dev.tomislavmiksik.phoenix.core.data.local.HealthSnapshotDao
 import dev.tomislavmiksik.phoenix.core.domain.model.HealthSnapshot
 import dev.tomislavmiksik.phoenix.core.domain.repository.HealthConnectRepository
 import java.time.Instant
@@ -16,7 +17,8 @@ import javax.inject.Singleton
 
 @Singleton
 class HealthConnectRepositoryImpl @Inject constructor(
-    private val clientWrapper: HealthConnectClientWrapper
+    private val clientWrapper: HealthConnectClientWrapper,
+    private val healthSnapshotDao: HealthSnapshotDao,
 ) : HealthConnectRepository {
 
     private val client get() = clientWrapper.healthConnectClient
@@ -43,12 +45,11 @@ class HealthConnectRepositoryImpl @Inject constructor(
         val weight = getLatestWeight(thirtyDaysAgo, now)
 
         return HealthSnapshot(
-            id = 0,
             steps = steps,
             sleepDuration = sleep,
             heartRate = heartRate ?: 0,
             weight = weight ?: 0.0,
-            exerciseCount = 0 // TODO: Implement exercise count
+            exerciseCount = 0,
         )
     }
 
@@ -63,7 +64,6 @@ class HealthConnectRepositoryImpl @Inject constructor(
         startDate: LocalDate,
         endDate: LocalDate
     ): Map<LocalDate, Long> {
-        val zone = ZoneId.systemDefault()
         val result = mutableMapOf<LocalDate, Long>()
 
         var current = startDate
@@ -83,7 +83,10 @@ class HealthConnectRepositoryImpl @Inject constructor(
         return client.readRecords(request).records.sumOf { it.count }
     }
 
-    private suspend fun getLatestSleep(startTime: Instant, endTime: Instant): java.time.LocalDateTime? {
+    private suspend fun getLatestSleep(
+        startTime: Instant,
+        endTime: Instant
+    ): java.time.LocalDateTime? {
         val request = ReadRecordsRequest(
             recordType = SleepSessionRecord::class,
             timeRangeFilter = TimeRangeFilter.between(startTime, endTime)

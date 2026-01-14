@@ -6,27 +6,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 /**
- * Light color scheme with orange (#FF8427) as the primary color.
- * This app uses light mode only.
+ * Light color scheme based on Phoenix app icon colors.
+ * Primary: Warm orange from phoenix wings
+ * Secondary: Gold from phoenix body
+ * Tertiary: Crimson from wing stripes
  */
 private val LightColorScheme = lightColorScheme(
-    // Primary colors - Orange (#FF8427)
-    primary = Orange,
+    // Primary colors - Phoenix Orange (wings)
+    primary = PhoenixOrange,
     onPrimary = Color.White,
-    primaryContainer = OrangeLight,
-    onPrimaryContainer = OrangeDark,
+    primaryContainer = PhoenixOrangeLight,
+    onPrimaryContainer = PhoenixOrangeDark,
 
-    // Secondary colors - Blue Grey
-    secondary = BlueGrey,
-    onSecondary = Color.White,
-    secondaryContainer = BlueGreyLight,
-    onSecondaryContainer = BlueGreyDark,
+    // Secondary colors - Phoenix Gold (body)
+    secondary = PhoenixGold,
+    onSecondary = DarkGrey,
+    secondaryContainer = PhoenixGoldLight,
+    onSecondaryContainer = PhoenixGoldDark,
 
-    // Tertiary colors - Amber
-    tertiary = Amber,
-    onTertiary = DarkGrey,
-    tertiaryContainer = AmberLight,
-    onTertiaryContainer = AmberDark,
+    // Tertiary colors - Phoenix Crimson (wing stripes)
+    tertiary = PhoenixCrimson,
+    onTertiary = Color.White,
+    tertiaryContainer = PhoenixCrimsonLight,
+    onTertiaryContainer = PhoenixCrimsonDark,
 
     // Error colors
     error = Color(0xFFB00020),
@@ -51,7 +53,7 @@ private val LightColorScheme = lightColorScheme(
 
 /**
  * Phoenix theme with light mode only.
- * Uses orange (#FF8427) as the primary brand color.
+ * Colors derived from the phoenix app icon.
  */
 @Composable
 fun PhoenixTheme(

@@ -15,5 +15,5 @@ import dev.tomislavmiksik.phoenix.core.domain.model.HealthSnapshot
     LocalDateTimeConverter::class,
 )
 abstract class PhoenixDatabase : RoomDatabase() {
-    // TODO: Add DAOs here when implementing local caching for health data
+    abstract fun healthSnapshotDao(): HealthSnapshotDao
 }

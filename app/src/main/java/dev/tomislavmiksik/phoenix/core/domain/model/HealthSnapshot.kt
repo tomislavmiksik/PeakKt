@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Entity
 data class HealthSnapshot(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Long? = null,
     val steps: Long,
     val sleepDuration: LocalDateTime?,
     val heartRate: Long,
