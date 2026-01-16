@@ -1,6 +1,6 @@
 <resources>
     <!-- App Name -->
-    <string name="app_name">Phoenix</string>
+    <string name="app_name">Peak</string>
 
     <!-- Common -->
     <string name="common_back">Back</string>
@@ -11,18 +11,18 @@
     <string name="common_add">Add</string>
 
     <!-- Health Connect -->
-    <string name="health_permissions_rationale">Phoenix displays your health data from Health Connect to help you track your fitness progress with rich visualizations.</string>
+    <string name="health_permissions_rationale">Peak displays your health data from Health Connect to help you track your fitness progress with rich visualizations.</string>
     <string name="health_connect_not_installed">Health Connect is not installed</string>
-    <string name="health_connect_install_prompt">Please install Health Connect to use Phoenix</string>
+    <string name="health_connect_install_prompt">Please install Health Connect to use Peak</string>
     <string name="health_connect_permissions_required">Health permissions required</string>
     <string name="health_connect_grant_permissions">Grant Permissions</string>
     <string name="health_connect_required">Health Connect Required</string>
-    <string name="health_connect_install_play_store">Please install Health Connect from the Play Store to use Phoenix.</string>
+    <string name="health_connect_install_play_store">Please install Health Connect from the Play Store to use Peak.</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome">Welcome to Phoenix</string>
+    <string name="onboarding_welcome">Welcome to Peak</string>
     <string name="onboarding_subtitle">Your personal health dashboard</string>
-    <string name="onboarding_description">Phoenix connects to Health Connect to display your steps, sleep, heart rate, workouts, and weight with beautiful visualizations.</string>
+    <string name="onboarding_description">Peak connects to Health Connect to display your steps, sleep, heart rate, workouts, and weight with beautiful visualizations.</string>
     <string name="onboarding_connect_health_data">Connect Health Data</string>
 
     <!-- Navigation -->

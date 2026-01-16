@@ -26,13 +26,13 @@ fun loadProperties(file: File): Properties {
 }
 
 android {
-    namespace = "dev.tomislavmiksik.phoenix"
+    namespace = "dev.tomislavmiksik.peak"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "dev.tomislavmiksik.phoenix"
+        applicationId = "dev.tomislavmiksik.peak"
         minSdk = 30
         targetSdk = 36
         versionCode = 1
@@ -49,7 +49,7 @@ android {
             dimension = "environment"
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
-            resValue("string", "app_name", "Phoenix Dev")
+            resValue("string", "app_name", "Peak Dev")
 
             val apiUrl = devProperties.getProperty("api.base.url")
                 ?: "https://dev-api.example.com/"
@@ -78,11 +78,11 @@ android {
             dimension = "environment"
             applicationIdSuffix = ".staging"
             versionNameSuffix = "-staging"
-            resValue("string", "app_name", "Phoenix Staging")
+            resValue("string", "app_name", "Peak Staging")
         }
         create("prod") {
             dimension = "environment"
-            resValue("string", "app_name", "Phoenix")
+            resValue("string", "app_name", "Peak")
         }
     }
 
