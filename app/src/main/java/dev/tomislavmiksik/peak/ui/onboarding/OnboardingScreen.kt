@@ -21,9 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.tomislavmiksik.peak.R
@@ -91,18 +91,18 @@ private fun OnboardingWelcome(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(dimensionResource(R.dimen.spacing_xxl)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
             imageVector = Icons.Default.Favorite,
             contentDescription = null,
-            modifier = Modifier.size(80.dp),
+            modifier = Modifier.size(dimensionResource(R.dimen.icon_lg)),
             tint = MaterialTheme.colorScheme.primary
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_xl)))
 
         Text(
             text = stringResource(R.string.onboarding_welcome),
@@ -110,7 +110,7 @@ private fun OnboardingWelcome(
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_lg)))
 
         Text(
             text = stringResource(R.string.onboarding_subtitle),
@@ -119,7 +119,7 @@ private fun OnboardingWelcome(
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_xxl)))
 
         Text(
             text = stringResource(R.string.onboarding_description),
@@ -129,7 +129,7 @@ private fun OnboardingWelcome(
         )
 
         state.errorMessage?.let { error ->
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_lg)))
             Text(
                 text = error,
                 style = MaterialTheme.typography.bodyMedium,
@@ -138,7 +138,7 @@ private fun OnboardingWelcome(
             )
         }
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_xxxl)))
 
         Button(
             onClick = onRequestPermissions,
@@ -154,18 +154,18 @@ private fun HealthConnectUnavailable(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(dimensionResource(R.dimen.spacing_xxl)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
             imageVector = Icons.Default.Warning,
             contentDescription = null,
-            modifier = Modifier.size(80.dp),
+            modifier = Modifier.size(dimensionResource(R.dimen.icon_lg)),
             tint = MaterialTheme.colorScheme.error
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_xl)))
 
         Text(
             text = stringResource(R.string.health_connect_required),
@@ -173,7 +173,7 @@ private fun HealthConnectUnavailable(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_lg)))
 
         Text(
             text = stringResource(R.string.health_connect_install_play_store),

@@ -41,12 +41,21 @@ interface HealthSnapshotDao {
     suspend fun getSnapshotByDate(date: LocalDate): HealthSnapshot?
 
     @Query("SELECT * FROM HealthSnapshot WHERE date >= :startDate AND date <= :endDate ORDER BY date DESC")
-    suspend fun getSnapshotsInDateRange(startDate: LocalDate, endDate: LocalDate): List<HealthSnapshot>
+    suspend fun getSnapshotsInDateRange(
+        startDate: LocalDate,
+        endDate: LocalDate,
+    ): List<HealthSnapshot>
 
     @Query("SELECT * FROM HealthSnapshot WHERE date >= :startDate AND date <= :endDate ORDER BY date DESC")
-    fun getSnapshotsInDateRangeFlow(startDate: LocalDate, endDate: LocalDate): Flow<List<HealthSnapshot>>
+    fun getSnapshotsInDateRangeFlow(
+        startDate: LocalDate,
+        endDate: LocalDate,
+    ): Flow<List<HealthSnapshot>>
 
-    @Query("DELETE FROM HealthSnapshot WHERE id NOT IN (SELECT id FROM HealthSnapshot ORDER BY date DESC LIMIT :keepCount)")
+    @Query(
+        "DELETE FROM HealthSnapshot WHERE id NOT IN " +
+                "(SELECT id FROM HealthSnapshot ORDER BY date DESC LIMIT :keepCount)"
+    )
     suspend fun deleteOldSnapshots(keepCount: Int)
 
     @Query("DELETE FROM HealthSnapshot")

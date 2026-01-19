@@ -15,7 +15,10 @@ data object MainRoute
 data object DashboardRoute
 
 @Serializable
-data object ProfileRoute
+data object ActivityRoute
+
+@Serializable
+data object StatsRoute
 
 fun NavGraphBuilder.mainGraph() {
     navigation<MainGraph>(

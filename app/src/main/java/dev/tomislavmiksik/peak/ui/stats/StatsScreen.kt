@@ -1,4 +1,4 @@
-package dev.tomislavmiksik.peak.ui.profile
+package dev.tomislavmiksik.peak.ui.stats
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import dev.tomislavmiksik.peak.R
 
 @Composable
-fun ProfileScreen(
+fun StatsScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -25,7 +25,7 @@ fun ProfileScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = stringResource(R.string.profile_title),
+            text = stringResource(R.string.stats_title),
             style = MaterialTheme.typography.headlineLarge
         )
         Text(

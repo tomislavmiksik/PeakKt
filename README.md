@@ -1,28 +1,30 @@
-# Phoenix
+# Peak
 
-Android clipboard manager that monitors copies, stores history locally, and lets you search, pin, and reuse past clipboard entries.
+Android health dashboard that connects to Health Connect to display your fitness data with beautiful visualizations.
 
 ## Status
 
 🚧 Work in progress
 
-## Planned Features
+## Features
 
-- Clipboard monitoring via foreground service
-- Local history storage with Room
-- Search and pin entries
-- Optional account sync across devices
+- Health Connect integration for steps, sleep, heart rate, workouts, and weight
+- Contribution calendar for tracking daily activity
+- Pull-to-refresh dashboard
+- Material 3 design with custom forest green theme
 
 ## Tech Stack
 
 - Kotlin, Jetpack Compose, Material 3
 - Hilt, Room, Coroutines
+- Health Connect API
 
 ## Build
 
 ```bash
-./gradlew installDevDebug  # Install dev build
-./gradlew detekt           # Code analysis
+./gradlew installProdRelease  # Install prod build
+./gradlew installDevDebug     # Install dev build
+./gradlew detekt              # Code analysis
 ```
 
 ## License

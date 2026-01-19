@@ -1,6 +1,8 @@
 package dev.tomislavmiksik.peak.ui.dashboard.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,12 +10,10 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.tomislavmiksik.peak.R
@@ -36,35 +37,27 @@ fun CalendarProgressTracker(
     data: CalendarProgressTrackerData,
     modifier: Modifier = Modifier,
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
-        )
+    Column(
+        modifier = modifier.padding(dimensionResource(R.dimen.spacing_sm)),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = LocalDate.now().toMonthYearStringShort(),
+            text = data.stepsByDate.keys.first().toMonthYearStringShort(),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(
-                start = 16.dp,
-            )
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(
+            modifier = Modifier
+                .height(dimensionResource(R.dimen.spacing_sm))
+        )
         Row(
-            modifier = Modifier.padding(
-                bottom = 16.dp
-            ),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.spacing_lg)),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_sm))
         ) {
             FlowRow(
-                modifier = modifier
-                    .fillMaxWidth(0.6f)
-                    .padding(
-                        start = 16.dp,
-                    ),
-                horizontalArrangement = Arrangement.spacedBy(2.dp),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
+                modifier = modifier,
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_xxs)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_xxs)),
                 maxItemsInEachRow = 7
             ) {
                 val stepsByDate = data.stepsByDate
@@ -76,10 +69,8 @@ fun CalendarProgressTracker(
                                 color = MaterialTheme.colorScheme.surfaceVariant,
                                 shape = MaterialTheme.shapes.small
                             )
-                            .size(28.dp)
-                            .clip(
-                                shape = MaterialTheme.shapes.small
-                            )
+                            .size(dimensionResource(R.dimen.calendar_day_size))
+                            .clip(shape = MaterialTheme.shapes.small)
                     ) {
                         Text(
                             text = it.name.first().toString(),
@@ -90,55 +81,21 @@ fun CalendarProgressTracker(
                         )
                     }
                 }
-                for (i in 1 until LocalDate.now().withDayOfMonth(1).dayOfWeek.value) {
+                repeat(LocalDate.now().withDayOfMonth(1).dayOfWeek.value - 1) {
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .background(
-                                color = MaterialTheme.colorScheme.background,
+                                color = Color.Transparent,
                                 shape = MaterialTheme.shapes.small
                             )
-                            .size(28.dp)
-                            .clip(
-                                shape = MaterialTheme.shapes.small
-                            )
+                            .size(dimensionResource(R.dimen.calendar_day_size))
+                            .clip(shape = MaterialTheme.shapes.small)
                     ) {}
                 }
                 stepsByDate.forEach {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .background(
-                                color = stepCountToColor(it.value),
-                                shape = MaterialTheme.shapes.small
-                            )
-                            .size(28.dp)
-                            .clip(
-                                shape = MaterialTheme.shapes.small
-                            )
-                    ) {
-                        //TODO: decide whether to show day numbers or not
-//                        Text(
-//                            text = it.key.dayOfMonth.toString(),
-//                            style = MaterialTheme.typography.bodySmall.copy(
-//                                textAlign = TextAlign.Center,
-//                            ),
-//                            color = MaterialTheme.colorScheme.onSurface,
-//                        )
-                    }
+                    CalendarDay(dateData = it)
                 }
-            }
-            Column {
-                Text(
-                    text = stringResource(R.string.dashboard_average_steps_per_day),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Text(
-                    text = data.averageStepsPerDay.toString(),
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
             }
         }
     }
@@ -155,5 +112,70 @@ fun stepCountToColor(steps: Long, goal: Int = 10000): Color {
         ratio >= 0.5f -> primary.copy(alpha = 0.6f)
         ratio > 0f -> primary.copy(alpha = 0.3f)
         else -> onSurfaceVariant.copy(alpha = 0.2f)
+    }
+}
+
+
+@Composable
+fun CalendarDay(dateData: Map.Entry<LocalDate, Long>) {
+    val isToday = dateData.key == LocalDate.now()
+    val calendarDaySize = dimensionResource(R.dimen.calendar_day_size)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .background(
+                color = stepCountToColor(dateData.value),
+                shape = MaterialTheme.shapes.small
+            )
+            .size(calendarDaySize)
+            .clip(shape = MaterialTheme.shapes.small)
+            .border(
+                width = if (isToday) 2.dp else 1.dp,
+                color = if (isToday)
+                    Color.Black
+                else
+                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+                shape = MaterialTheme.shapes.small,
+            )
+    ) {
+        if (isToday) {
+            Canvas(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                val r = 4.dp.toPx()
+                val triangleHeight = size.height * 0.45f
+
+                val path = Path().apply {
+                    moveTo(r, size.height)
+                    lineTo(size.width / 2, size.height - triangleHeight)
+                    lineTo(size.width - r, size.height)
+                    arcTo(
+                        rect = androidx.compose.ui.geometry.Rect(
+                            left = size.width - r * 2,
+                            top = size.height - r * 2,
+                            right = size.width,
+                            bottom = size.height
+                        ),
+                        startAngleDegrees = 0f,
+                        sweepAngleDegrees = 90f,
+                        forceMoveTo = false
+                    )
+                    lineTo(r, size.height)
+                    arcTo(
+                        rect = androidx.compose.ui.geometry.Rect(
+                            left = 0f,
+                            top = size.height - r * 2,
+                            right = r * 2,
+                            bottom = size.height
+                        ),
+                        startAngleDegrees = 90f,
+                        sweepAngleDegrees = 90f,
+                        forceMoveTo = false
+                    )
+                    close()
+                }
+                drawPath(path, color = Color.Black)
+            }
+        }
     }
 }

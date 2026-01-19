@@ -5,6 +5,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.tomislavmiksik.peak.core.domain.model.HealthSnapshot
 import dev.tomislavmiksik.peak.core.domain.repository.HealthConnectRepository
 import dev.tomislavmiksik.peak.ui.base.BaseViewModel
+import dev.tomislavmiksik.peak.ui.dashboard.components.ActivityType
+import dev.tomislavmiksik.peak.ui.dashboard.components.RecentActivity
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -144,6 +146,9 @@ data class DashboardState(
     val stepsByDate: Map<LocalDate, Long> = emptyMap(),
     val caloriesByDate: Map<LocalDate, Long> = emptyMap(),
     val dateRange: Pair<LocalDate, LocalDate>,
+
+    // Recent activities
+    val recentActivities: List<RecentActivity> = emptyList(),
 ) {
     val calendarProgressTrackerData: CalendarProgressTrackerData
         get() {
