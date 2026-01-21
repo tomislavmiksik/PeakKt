@@ -25,24 +25,7 @@ fun HomeHeroSection(
     goal: Long = 10_000L,
     calendarData: CalendarProgressTrackerData,
 ) {
-    val progress = (steps.toFloat() / goal).coerceIn(0f, 1f)
-
-    val messageRes = when {
-        progress == 0f -> R.string.peak_message_start
-        progress < 0.25f -> R.string.peak_message_25
-        progress < 0.50f -> R.string.peak_message_50
-        progress < 0.75f -> R.string.peak_message_75
-        progress < 1f -> R.string.peak_message_99
-        else -> R.string.peak_message_100
-    }
-
     Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = stringResource(messageRes),
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_lg)))
 
         PeakBox(modifier = Modifier.fillMaxWidth()) {
             Row(

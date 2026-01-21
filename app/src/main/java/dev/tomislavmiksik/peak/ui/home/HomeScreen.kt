@@ -1,21 +1,24 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@file:OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    ExperimentalMaterial3ExpressiveApi::class
+)
 
 package dev.tomislavmiksik.peak.ui.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -25,14 +28,15 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.tomislavmiksik.peak.R
@@ -74,7 +78,7 @@ private fun HomeContent(
             Box(
                 modifier = modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
-            ) { CircularProgressIndicator() }
+            ) { LoadingIndicator() }
         }
 
         state.error != null -> {
@@ -91,29 +95,47 @@ private fun HomeContent(
 
         else -> {
             val pullToRefreshState = rememberPullToRefreshState()
+            val scrollBehavior =
+                TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+            val progress = (state.steps.toFloat() / 10000).coerceIn(0f, 1f)
+            val messageRes = when {
+                progress == 0f -> R.string.peak_message_start
+                progress < 0.25f -> R.string.peak_message_25
+                progress < 0.50f -> R.string.peak_message_50
+                progress < 0.75f -> R.string.peak_message_75
+                progress < 1f -> R.string.peak_message_99
+                else -> R.string.peak_message_100
+            }
             Scaffold(
                 containerColor = Color.White,
+                contentWindowInsets = TopAppBarDefaults.windowInsets,
                 topBar = {
                     TopAppBar(
-                        windowInsets = WindowInsets(top = 0.dp, bottom = 0.dp),
                         colors = TopAppBarDefaults.topAppBarColors(
                             containerColor = MaterialTheme.colorScheme.background
                         ),
                         title = {
                             Text(
-                                text = stringResource(R.string.home_title),
+                                text = stringResource(messageRes),
                                 style = MaterialTheme.typography.headlineSmall,
-                                color = MaterialTheme.colorScheme.primary
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                         },
                         actions = {
-                            HomeHeader()
+                            IconButton(
+                                onClick = { /* TODO: Navigate to profile screen */ }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Person,
+                                    contentDescription = stringResource(R.string.profile_button)
+                                )
+                            }
                         },
-                        modifier = Modifier.fillMaxWidth(),
+                        scrollBehavior = scrollBehavior
                     )
-                }
+                },
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             ) { it ->
-
                 Surface(
                     modifier = Modifier
                         .padding(top = it.calculateTopPadding())

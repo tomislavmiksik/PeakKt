@@ -8,7 +8,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
-import dev.tomislavmiksik.peak.ui.theme.ForestGreen
+import dev.tomislavmiksik.peak.ui.theme.primaryLight
 
 @Composable
 fun DailyPeakMountain(
@@ -49,7 +49,7 @@ fun DailyPeakMountain(
         }
 
         // Unfilled mountain
-        drawPath(mountainPath, color = ForestGreen.copy(alpha = 0.2f))
+        drawPath(mountainPath, color = primaryLight.copy(alpha = 0.2f))
 
         // Fill from bottom
         if (progress > 0f) {
@@ -57,7 +57,7 @@ fun DailyPeakMountain(
 
             clipPath(mountainPath) {
                 drawRect(
-                    color = ForestGreen,
+                    color = primaryLight,
                     topLeft = Offset(0f, fillTop),
                     size = Size(w, h - fillTop)
                 )
