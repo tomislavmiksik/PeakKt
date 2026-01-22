@@ -32,10 +32,6 @@ class HealthConnectRepositoryImpl @Inject constructor(
     private val clientWrapper: HealthConnectClientWrapper,
 ) : HealthConnectRepository {
 
-    private val client get() = clientWrapper.healthConnectClient
-    private val zone get() = ZoneId.systemDefault()
-    private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-
     private suspend fun <T> safeRead(default: T, block: suspend () -> T): T {
         return try {
             block()
@@ -45,6 +41,20 @@ class HealthConnectRepositoryImpl @Inject constructor(
         }
     }
 
+    private data class ActivityAggregates(
+        val steps: Long = 0,
+        val distance: Double = 0.0,
+        val activeCalories: Double = 0.0,
+        val totalCalories: Double = 0.0,
+        val floors: Long = 0,
+    )
+
+    private val client get() = clientWrapper.healthConnectClient
+    private val zone get() = ZoneId.systemDefault()
+    private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+
+
+    //region Permissions
     override suspend fun isAvailable(): Boolean = clientWrapper.isAvailable()
 
     override suspend fun hasAllPermissions(): Boolean {
@@ -55,7 +65,9 @@ class HealthConnectRepositoryImpl @Inject constructor(
     }
 
     override fun getRequiredPermissions(): Set<String> = HealthConnectClientWrapper.PERMISSIONS
+    //endregion
 
+    //region Data collection and aggregation
     override suspend fun getTodaySnapshot(): HealthSnapshot {
         val now = Instant.now()
         val startOfDay = LocalDate.now().atStartOfDay(zone).toInstant()
@@ -140,46 +152,8 @@ class HealthConnectRepositoryImpl @Inject constructor(
         startDate: LocalDate,
         endDate: LocalDate,
     ): Map<LocalDate, Long> {
-        return safeRead(default = emptyMap()) {
-            val result = mutableMapOf<LocalDate, Long>()
-
-            val response = client.aggregateGroupByPeriod(
-                AggregateGroupByPeriodRequest(
-                    metrics = setOf(ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL),
-                    timeRangeFilter = TimeRangeFilter.between(
-                        startDate.atStartOfDay(zone).toInstant(),
-                        endDate.plusDays(1).atStartOfDay(zone).toInstant()
-                    ),
-                    timeRangeSlicer = Period.ofDays(1)
-                )
-            )
-
-            response.forEach { bucket ->
-                val date = bucket.startTime.atZone(zone).toLocalDate()
-                val calories = bucket.result[ActiveCaloriesBurnedRecord.ACTIVE_CALORIES_TOTAL]
-                    ?.inKilocalories?.toLong() ?: 0L
-                result[date] = calories
-            }
-
-            // Fill in missing dates with 0
-            var current = startDate
-            while (!current.isAfter(endDate)) {
-                result.putIfAbsent(current, 0L)
-                current = current.plusDays(1)
-            }
-
-            result
-        }
+        TODO("Not yet implemented")
     }
-
-    // Batched activity aggregation
-    private data class ActivityAggregates(
-        val steps: Long = 0,
-        val distance: Double = 0.0,
-        val activeCalories: Double = 0.0,
-        val totalCalories: Double = 0.0,
-        val floors: Long = 0,
-    )
 
     private suspend fun getActivityAggregates(
         startTime: Instant,
@@ -210,8 +184,9 @@ class HealthConnectRepositoryImpl @Inject constructor(
             )
         }
     }
+    //endregion
 
-    // Individual metric fetchers (use aggregate)
+    //region Aggregates
     private suspend fun getStepsInRange(startTime: Instant, endTime: Instant): Long {
         return safeRead(default = 0L) {
             val response = client.aggregate(
@@ -249,8 +224,9 @@ class HealthConnectRepositoryImpl @Inject constructor(
             client.readRecords(request).records
         }
     }
+    //endregion
 
-    // Sleep
+    //region Sleep
     private data class SleepData(
         val durationMinutes: Long,
         val startTime: String,
@@ -273,8 +249,9 @@ class HealthConnectRepositoryImpl @Inject constructor(
             }
         }
     }
+    //endregion
 
-    // Vitals
+    //region Heart Rate & Weight
     private suspend fun getLatestHeartRate(startTime: Instant, endTime: Instant): Long? {
         return safeRead(default = null) {
             val request = ReadRecordsRequest(
@@ -301,4 +278,5 @@ class HealthConnectRepositoryImpl @Inject constructor(
                 ?.inKilograms
         }
     }
+    //endregion
 }
