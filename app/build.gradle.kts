@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.dokka)
     id("com.google.android.gms.oss-licenses-plugin")
 }
 

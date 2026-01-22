@@ -27,6 +27,12 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Health connect repository impl
+ *
+ * @property clientWrapper
+ * @constructor Create empty Health connect repository impl
+ */
 @Singleton
 class HealthConnectRepositoryImpl @Inject constructor(
     private val clientWrapper: HealthConnectClientWrapper,
@@ -68,6 +74,11 @@ class HealthConnectRepositoryImpl @Inject constructor(
     //endregion
 
     //region Data collection and aggregation
+    /**
+     * Get today snapshot using multiple aggregates and reads
+     *
+     * @return
+     */
     override suspend fun getTodaySnapshot(): HealthSnapshot {
         val now = Instant.now()
         val startOfDay = LocalDate.now().atStartOfDay(zone).toInstant()
