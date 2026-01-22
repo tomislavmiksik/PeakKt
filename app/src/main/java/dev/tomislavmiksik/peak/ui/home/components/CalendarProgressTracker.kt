@@ -25,9 +25,11 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import dev.tomislavmiksik.peak.R
 import dev.tomislavmiksik.peak.core.util.extensions.toMonthYearStringShort
 import dev.tomislavmiksik.peak.ui.home.CalendarProgressTrackerData
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
 import java.time.DayOfWeek
 import java.time.LocalDate
 
@@ -179,3 +181,27 @@ fun CalendarDay(dateData: Map.Entry<LocalDate, Long>) {
         }
     }
 }
+
+//region Previews
+@Preview(showBackground = true)
+@Composable
+private fun CalendarProgressTracker_preview() {
+    val today = LocalDate.now()
+    val sampleSteps = (1..today.dayOfMonth).associate { day ->
+        today.withDayOfMonth(day) to (5000L + (day * 500L))
+    }
+    val sampleCalories = (1..today.dayOfMonth).associate { day ->
+        today.withDayOfMonth(day) to (1500L + (day * 50L))
+    }
+    PeakTheme {
+        CalendarProgressTracker(
+            data = CalendarProgressTrackerData(
+                stepsByDate = sampleSteps,
+                averageStepsPerDay = 8500L,
+                caloriesSpentByDate = sampleCalories,
+                averageCaloriesSpentPerDay = 1800L
+            )
+        )
+    }
+}
+//endregion

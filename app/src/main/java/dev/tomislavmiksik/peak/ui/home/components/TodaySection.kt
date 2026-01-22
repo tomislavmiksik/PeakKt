@@ -18,7 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import dev.tomislavmiksik.peak.R
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
 
 @Composable
 fun TodaySection(
@@ -93,3 +95,18 @@ private fun formatSleepDuration(minutes: Long): String {
         "${mins}m"
     }
 }
+
+//region Previews
+@Preview(showBackground = true)
+@Composable
+private fun TodaySection_preview() {
+    PeakTheme {
+        TodaySection(
+            sleepMinutes = 420,
+            heartRate = 72,
+            calories = 1850.0,
+            activeMinutes = 45
+        )
+    }
+}
+//endregion

@@ -41,8 +41,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.tooling.preview.Preview
 import dev.tomislavmiksik.peak.R
 import dev.tomislavmiksik.peak.ui.base.EventsEffect
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
 import kotlinx.coroutines.launch
 
 private data class OnboardingPageData(
@@ -315,3 +317,43 @@ private fun HealthConnectUnavailable(modifier: Modifier = Modifier) {
         )
     }
 }
+
+//region Previews
+@Preview(showBackground = true)
+@Composable
+private fun OnboardingContent_preview() {
+    PeakTheme {
+        OnboardingContent(
+            state = OnboardingState(
+                isLoading = false,
+                isHealthConnectAvailable = true,
+                errorMessage = null
+            ),
+            onRequestPermissions = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun OnboardingContent_loading_preview() {
+    PeakTheme {
+        OnboardingContent(
+            state = OnboardingState(
+                isLoading = true,
+                isHealthConnectAvailable = true,
+                errorMessage = null
+            ),
+            onRequestPermissions = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HealthConnectUnavailable_preview() {
+    PeakTheme {
+        HealthConnectUnavailable()
+    }
+}
+//endregion

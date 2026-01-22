@@ -14,9 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import dev.tomislavmiksik.peak.R
 import dev.tomislavmiksik.peak.ui.base.components.PeakBox
 import dev.tomislavmiksik.peak.ui.home.CalendarProgressTrackerData
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
+import java.time.LocalDate
 
 @Composable
 fun HomeHeroSection(
@@ -62,3 +65,29 @@ fun HomeHeroSection(
 private fun formatStepsWithCommas(steps: Long): String {
     return "%,d".format(steps)
 }
+
+//region Previews
+@Preview(showBackground = true)
+@Composable
+private fun HomeHeroSection_preview() {
+    val today = LocalDate.now()
+    val sampleSteps = (1..today.dayOfMonth).associate { day ->
+        today.withDayOfMonth(day) to (5000L + (day * 500L))
+    }
+    val sampleCalories = (1..today.dayOfMonth).associate { day ->
+        today.withDayOfMonth(day) to (1500L + (day * 50L))
+    }
+    PeakTheme {
+        HomeHeroSection(
+            steps = 7523,
+            goal = 10000,
+            calendarData = CalendarProgressTrackerData(
+                stepsByDate = sampleSteps,
+                averageStepsPerDay = 8500L,
+                caloriesSpentByDate = sampleCalories,
+                averageCaloriesSpentPerDay = 1800L
+            )
+        )
+    }
+}
+//endregion

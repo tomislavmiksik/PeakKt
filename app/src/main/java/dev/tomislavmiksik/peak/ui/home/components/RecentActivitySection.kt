@@ -26,7 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import dev.tomislavmiksik.peak.R
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
 
 data class RecentActivity(
     val type: ActivityType,
@@ -118,3 +120,42 @@ private fun ActivityCard(
         }
     }
 }
+
+//region Previews
+@Preview(showBackground = true)
+@Composable
+private fun RecentActivitySection_preview() {
+    PeakTheme {
+        RecentActivitySection(
+            activities = listOf(
+                RecentActivity(
+                    type = ActivityType.Running,
+                    title = "Morning Run",
+                    timeLabel = "Today, 7:30 AM",
+                    details = "5.2 km • 32 min"
+                ),
+                RecentActivity(
+                    type = ActivityType.Workout,
+                    title = "Strength Training",
+                    timeLabel = "Yesterday",
+                    details = "45 min • 320 kcal"
+                ),
+                RecentActivity(
+                    type = ActivityType.Cycling,
+                    title = "Evening Ride",
+                    timeLabel = "2 days ago",
+                    details = "12.5 km • 45 min"
+                )
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun RecentActivitySection_empty_preview() {
+    PeakTheme {
+        RecentActivitySection(activities = emptyList())
+    }
+}
+//endregion

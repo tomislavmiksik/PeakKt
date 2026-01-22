@@ -1,11 +1,11 @@
 package dev.tomislavmiksik.peak.ui.home
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.tomislavmiksik.peak.core.domain.model.HealthSnapshot
 import dev.tomislavmiksik.peak.core.domain.repository.HealthConnectRepository
 import dev.tomislavmiksik.peak.ui.base.BaseViewModel
-import dev.tomislavmiksik.peak.ui.home.components.ActivityType
 import dev.tomislavmiksik.peak.ui.home.components.RecentActivity
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -72,6 +72,7 @@ class HomeViewModel @Inject constructor(
                     )
                 )
             } catch (e: Exception) {
+                Log.d("ERR", "fetchAllHealthData: ${e.message}", e)
                 sendAction(HomeAction.Internal.HealthDataError(e.message ?: "Unknown error"))
             }
         }
@@ -190,7 +191,7 @@ sealed class HomeAction {
     sealed class Internal : HomeAction() {
         data class HealthDataLoaded(
             val snapshot: HealthSnapshot,
-            val stepsByDate: Map<LocalDate, Long>,
+            val stepsByDate: Map<LocalDate, Long> = emptyMap(),
             val caloriesByDate: Map<LocalDate, Long> = emptyMap(),
         ) : Internal()
 

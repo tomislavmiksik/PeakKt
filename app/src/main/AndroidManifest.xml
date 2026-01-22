@@ -20,6 +20,10 @@
     <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND" />
     <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_HISTORY" />
 
+    <!--Image and Photo permissions-->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+
     <application
         android:name=".PeakApplication"
         android:allowBackup="true"

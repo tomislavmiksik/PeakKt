@@ -15,11 +15,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.ui.tooling.preview.Preview
 import dev.tomislavmiksik.peak.ui.activity.ActivityScreen
 import dev.tomislavmiksik.peak.ui.home.HomeScreen
-import dev.tomislavmiksik.peak.ui.progress.ProgressScreen
 import dev.tomislavmiksik.peak.ui.main.components.BottomNavBar
 import dev.tomislavmiksik.peak.ui.main.components.BottomNavDestination
+import dev.tomislavmiksik.peak.ui.progress.ProgressScreen
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -72,3 +78,30 @@ fun MainScreen(
         }
     }
 }
+
+//region Previews
+@Preview(showBackground = true)
+@Composable
+private fun MainScreen_preview() {
+    PeakTheme {
+        Scaffold(
+            containerColor = MaterialTheme.colorScheme.background,
+            bottomBar = {
+                BottomNavBar(
+                    currentDestination = BottomNavDestination.Home,
+                    onDestinationSelected = {}
+                )
+            }
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = androidx.compose.ui.Alignment.Center
+            ) {
+                Text("Home Screen Content")
+            }
+        }
+    }
+}
+//endregion

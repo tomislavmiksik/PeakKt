@@ -11,7 +11,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import dev.tomislavmiksik.peak.R
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
 
 @Composable
 fun ActivityScreen(
@@ -35,3 +37,13 @@ fun ActivityScreen(
         )
     }
 }
+
+//region Previews
+@Preview(showBackground = true)
+@Composable
+private fun ActivityScreen_preview() {
+    PeakTheme {
+        ActivityScreen()
+    }
+}
+//endregion

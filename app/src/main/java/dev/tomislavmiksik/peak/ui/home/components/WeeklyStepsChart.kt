@@ -20,7 +20,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import dev.tomislavmiksik.peak.R
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -167,3 +169,23 @@ private fun formatStepsShort(steps: Long): String {
         else -> steps.toString()
     }
 }
+
+//region Previews
+@Preview(showBackground = true)
+@Composable
+private fun WeeklyStepsChart_preview() {
+    val today = LocalDate.now()
+    val sampleData = mapOf(
+        today.minusDays(6) to 8500L,
+        today.minusDays(5) to 12000L,
+        today.minusDays(4) to 6800L,
+        today.minusDays(3) to 9200L,
+        today.minusDays(2) to 11500L,
+        today.minusDays(1) to 7300L,
+        today to 5400L
+    )
+    PeakTheme {
+        WeeklyStepsChart(stepsByDate = sampleData)
+    }
+}
+//endregion

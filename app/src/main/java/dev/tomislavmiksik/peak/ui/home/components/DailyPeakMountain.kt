@@ -8,6 +8,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.tooling.preview.Preview
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
 import dev.tomislavmiksik.peak.ui.theme.primaryLight
 
 @Composable
@@ -25,29 +27,41 @@ fun DailyPeakMountain(
         val h = size.height
 
         val mountainPath = Path().apply {
-            // Start bottom left
             moveTo(0f, h)
 
-            // Up to small left peak
-            lineTo(w * 0.15f, h * 0.55f)
+            // Smooth curve to small left peak
+            quadraticTo(
+                w * 0.07f, h * 0.7f,   // control point
+                w * 0.15f, h * 0.55f   // end point (small peak)
+            )
 
-            // Down to valley
-            lineTo(w * 0.25f, h * 0.75f)
+            // Smooth down to valley
+            quadraticTo(
+                w * 0.20f, h * 0.65f,
+                w * 0.25f, h * 0.75f   // valley
+            )
 
-            // Up to main peak
-            lineTo(w * 0.55f, h * 0.08f)
+            // Smooth up to main peak
+            quadraticTo(
+                w * 0.40f, h * 0.3f,
+                w * 0.55f, h * 0.08f   // main peak
+            )
 
-            // Small ridge/shoulder
-            lineTo(w * 0.65f, h * 0.15f)
+            // Smooth to shoulder
+            quadraticTo(
+                w * 0.60f, h * 0.10f,
+                w * 0.65f, h * 0.15f   // shoulder
+            )
 
-            // Down to right base
-            lineTo(w, h * 0.85f)
+            // Smooth down to right base
+            quadraticTo(
+                w * 0.82f, h * 0.5f,
+                w, h * 0.85f           // right base
+            )
 
-            // Close along bottom
             lineTo(w, h)
             close()
         }
-
         // Unfilled mountain
         drawPath(mountainPath, color = primaryLight.copy(alpha = 0.2f))
 
@@ -65,3 +79,16 @@ fun DailyPeakMountain(
         }
     }
 }
+
+//region Previews
+@Preview(showBackground = true)
+@Composable
+private fun DailyPeakMountain_preview() {
+    PeakTheme {
+        DailyPeakMountain(
+            steps = 7500,
+            goal = 10000
+        )
+    }
+}
+//endregion

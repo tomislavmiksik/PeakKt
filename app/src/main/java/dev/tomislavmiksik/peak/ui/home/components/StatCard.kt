@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.tooling.preview.Preview
 import dev.tomislavmiksik.peak.R
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
 
 @Composable
 fun StatCard(
@@ -58,3 +62,19 @@ fun StatCard(
         )
     }
 }
+
+//region Previews
+@Preview(showBackground = true)
+@Composable
+private fun StatCard_preview() {
+    PeakTheme {
+        StatCard(
+            icon = Icons.Default.Favorite,
+            iconTint = Color(0xFFE91E63),
+            title = "Heart Rate",
+            value = "72",
+            subtitle = "bpm resting"
+        )
+    }
+}
+//endregion

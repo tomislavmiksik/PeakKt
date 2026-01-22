@@ -8,6 +8,7 @@ package dev.tomislavmiksik.peak.ui.home
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,25 +27,30 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.LoadingIndicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.tomislavmiksik.peak.R
 import dev.tomislavmiksik.peak.ui.base.EventsEffect
+import dev.tomislavmiksik.peak.ui.home.components.ActivityType
 import dev.tomislavmiksik.peak.ui.home.components.HomeHeroSection
+import dev.tomislavmiksik.peak.ui.home.components.RecentActivity
 import dev.tomislavmiksik.peak.ui.home.components.RecentActivitySection
 import dev.tomislavmiksik.peak.ui.home.components.TodaySection
 import dev.tomislavmiksik.peak.ui.home.components.WeeklyStepsChart
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
+import java.time.LocalDate
 
 @Composable
 fun HomeScreen(
@@ -107,13 +113,9 @@ private fun HomeContent(
                 else -> R.string.peak_message_100
             }
             Scaffold(
-                containerColor = Color.White,
                 contentWindowInsets = TopAppBarDefaults.windowInsets,
                 topBar = {
                     TopAppBar(
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.background
-                        ),
                         title = {
                             Text(
                                 text = stringResource(messageRes),
@@ -131,7 +133,11 @@ private fun HomeContent(
                                 )
                             }
                         },
-                        scrollBehavior = scrollBehavior
+                        colors = TopAppBarDefaults.topAppBarColors().copy(
+                            scrolledContainerColor = MaterialTheme.colorScheme.background
+                        ),
+                        scrollBehavior = scrollBehavior,
+                        windowInsets = WindowInsets(top = 0.dp, bottom = 0.dp),
                     )
                 },
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -146,10 +152,10 @@ private fun HomeContent(
                         modifier = modifier.fillMaxSize(),
                         state = pullToRefreshState,
                         indicator = {
-                            Indicator(
+                            LoadingIndicator(
+                                state = pullToRefreshState,
                                 modifier = Modifier.align(Alignment.TopCenter),
                                 isRefreshing = state.isRefreshing,
-                                state = pullToRefreshState,
                                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 color = MaterialTheme.colorScheme.primary,
                             )
@@ -203,21 +209,75 @@ private fun HomeContent(
     }
 }
 
+//region Previews
+@Preview(showBackground = true)
 @Composable
-private fun HomeHeader(
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier.fillMaxWidth(),
-        contentAlignment = Alignment.TopEnd
-    ) {
-        IconButton(
-            onClick = { /* TODO: Navigate to profile screen */ }
-        ) {
-            Icon(
-                imageVector = Icons.Default.Person,
-                contentDescription = stringResource(R.string.profile_button)
-            )
-        }
+private fun HomeContent_preview() {
+    val today = LocalDate.now()
+    val sampleSteps = (1..today.dayOfMonth).associate { day ->
+        today.withDayOfMonth(day) to (5000L + (day * 500L))
+    }
+    val sampleCalories = (1..today.dayOfMonth).associate { day ->
+        today.withDayOfMonth(day) to (1500L + (day * 50L))
+    }
+    PeakTheme {
+        HomeContent(
+            state = HomeState(
+                isLoading = false,
+                steps = 7523,
+                sleepDurationMinutes = 420,
+                heartRate = 72,
+                activeCalories = 1850.0,
+                exerciseDurationMinutes = 45,
+                stepsByDate = sampleSteps,
+                caloriesByDate = sampleCalories,
+                dateRange = today.minusDays(30) to today,
+                recentActivities = listOf(
+                    RecentActivity(
+                        type = ActivityType.Running,
+                        title = "Morning Run",
+                        timeLabel = "Today, 7:30 AM",
+                        details = "5.2 km • 32 min"
+                    ),
+                    RecentActivity(
+                        type = ActivityType.Workout,
+                        title = "Strength Training",
+                        timeLabel = "Yesterday",
+                        details = "45 min • 320 kcal"
+                    )
+                )
+            ),
+            onRefresh = {}
+        )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeContent_loading_preview() {
+    PeakTheme {
+        HomeContent(
+            state = HomeState(
+                isLoading = true,
+                dateRange = LocalDate.now().minusDays(30) to LocalDate.now()
+            ),
+            onRefresh = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeContent_error_preview() {
+    PeakTheme {
+        HomeContent(
+            state = HomeState(
+                isLoading = false,
+                error = "Failed to load health data",
+                dateRange = LocalDate.now().minusDays(30) to LocalDate.now()
+            ),
+            onRefresh = {}
+        )
+    }
+}
+//endregion

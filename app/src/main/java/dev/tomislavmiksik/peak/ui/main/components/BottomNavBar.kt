@@ -18,10 +18,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import dev.tomislavmiksik.peak.R
 import dev.tomislavmiksik.peak.ui.main.ActivityRoute
 import dev.tomislavmiksik.peak.ui.main.HomeRoute
 import dev.tomislavmiksik.peak.ui.main.ProgressRoute
+import dev.tomislavmiksik.peak.ui.theme.PeakTheme
 
 @Composable
 fun BottomNavBar(
@@ -80,3 +82,16 @@ enum class BottomNavDestination(
         labelRes = R.string.nav_progress
     )
 }
+
+//region Previews
+@Preview(showBackground = true)
+@Composable
+private fun BottomNavBar_preview() {
+    PeakTheme {
+        BottomNavBar(
+            currentDestination = BottomNavDestination.Home,
+            onDestinationSelected = {}
+        )
+    }
+}
+//endregion
